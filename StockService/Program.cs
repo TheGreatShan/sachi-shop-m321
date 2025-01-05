@@ -1,3 +1,6 @@
+using Steeltoe.Discovery.Client;
+using Steeltoe.Discovery.Eureka;
+
 public class Program
 {
     public static void Main(string[] args)
@@ -7,6 +10,7 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddControllers();
+        builder.Services.AddServiceDiscovery(options => options.UseEureka());
 
         var app = builder.Build();
 
@@ -16,6 +20,7 @@ public class Program
             app.UseSwaggerUI();
         }
 
+        app.UseDiscoveryClient();
         app.UseHttpsRedirection();
         app.MapControllers();
 
