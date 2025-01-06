@@ -7,12 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Dapper" Version="2.1.35" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.6"/>
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+        <PackageReference Include="MySqlConnector" Version="2.4.0" />
         <PackageReference Include="Steeltoe.Common.Hosting" Version="3.2.8" />
         <PackageReference Include="Steeltoe.Discovery.ClientCore" Version="3.2.8" />
         <PackageReference Include="Steeltoe.Discovery.Eureka" Version="3.2.8" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+
     </ItemGroup>
+
 
 
 

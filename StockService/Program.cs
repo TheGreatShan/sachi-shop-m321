@@ -1,5 +1,6 @@
 using Steeltoe.Discovery.Client;
 using Steeltoe.Discovery.Eureka;
+using StockService;
 
 public class Program
 {
@@ -7,10 +8,8 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
-        builder.Services.AddControllers();
-        builder.Services.AddServiceDiscovery(options => options.UseEureka());
+        var apiModule = new ApiModule();
+        apiModule.ConfigureServices(builder.Services);
 
         var app = builder.Build();
 
