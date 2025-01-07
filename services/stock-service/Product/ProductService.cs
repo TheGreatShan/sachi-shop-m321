@@ -1,4 +1,4 @@
-namespace StockService.Product;
+namespace stock;
 
 public interface IProductService
 {
