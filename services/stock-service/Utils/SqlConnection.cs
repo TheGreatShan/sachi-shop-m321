@@ -1,7 +1,7 @@
 using System.Data;
 using MySqlConnector;
 
-namespace StockService.Utils;
+namespace stock;
 
 public static class SqlConnection
 {

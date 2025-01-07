@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockService", "StockService.csproj", "{95EC00DF-91F1-4FC1-AD0B-9FEF700609FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockService", "stock-service.csproj", "{95EC00DF-91F1-4FC1-AD0B-9FEF700609FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

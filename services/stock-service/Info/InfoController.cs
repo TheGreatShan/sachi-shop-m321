@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace StockService.Info;
+namespace stock;
 
 public record Info(string Message);
 

@@ -2,11 +2,8 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using Steeltoe.Discovery.Client;
 using Steeltoe.Discovery.Eureka;
-using StockService.Product;
-using StockService.Utils;
-using SqlConnection = StockService.Utils.SqlConnection;
 
-namespace StockService;
+namespace stock;
 
 public class ApiModule
 {

@@ -1,7 +1,7 @@
 using System.Data;
 using Dapper;
 
-namespace StockService.Product;
+namespace stock;
 
 public interface IProductRepository
 {

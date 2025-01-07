@@ -1,6 +1,5 @@
 using Steeltoe.Discovery.Client;
-using Steeltoe.Discovery.Eureka;
-using StockService;
+using stock;
 
 public class Program
 {
