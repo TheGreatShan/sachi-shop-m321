@@ -11,7 +11,8 @@ import (
 
 func main() {
 	utils.InitializeDatabase()
-	utils.ConnectEureka()
+	// utils.ConnectEureka()
+
 
 	r := mux.NewRouter()
 	r.HandleFunc("/ping", handlers.HandlePing).Methods("GET")
