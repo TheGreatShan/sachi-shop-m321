@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace StockService.Product;
+namespace stock;
 
 public class ProductController(IProductService productService) : Controller
 {
