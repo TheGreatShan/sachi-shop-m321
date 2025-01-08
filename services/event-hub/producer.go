@@ -5,7 +5,7 @@ import (
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
 
-func ProduceEvent(message string) {
+func ProduceEvent(message string, topic string) {
     fmt.Println("Starting Producer")
 
     p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": "localhost"})
@@ -27,7 +27,6 @@ func ProduceEvent(message string) {
         }
     }()
 
-    topic := "logs"
     p.Produce(&kafka.Message{
         TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
         Value:          []byte(message),
