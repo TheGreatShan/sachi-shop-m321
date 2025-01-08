@@ -12,6 +12,7 @@ import (
 func main() {
 	utils.InitializeDatabase()
 	// utils.ConnectEureka()
+	utils.ConsumeLogs()
 
 
 	r := mux.NewRouter()
