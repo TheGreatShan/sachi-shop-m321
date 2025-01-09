@@ -18,4 +18,7 @@ internal static class ProductExtensions
         new(product.Product, product.Informations.Select(information =>
             new InformationPayload(information.Id, information.ProductId, information.Information,
                 information.Stage.ToString())).ToList());
+
+    public static List<ProductInformationPayload> ToPayload(this List<ProductInformation> products) =>
+        products.Select(products => products.ToPayload()).ToList();
 }

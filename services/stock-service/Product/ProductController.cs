@@ -4,6 +4,13 @@ namespace stock;
 
 public class ProductController(IProductService productService) : Controller
 {
+    [HttpGet("/products")]
+    public ActionResult<ProductInformationPayload> GetAllProducts()
+    {
+
+        var product = productService.GetAllProducts().ToPayload();
+        return product == null ? NotFound() : Ok(product);
+    }
     [HttpGet("/products/{id}")]
     public ActionResult<ProductInformationPayload> GetProductById(Guid id)
     {
@@ -40,7 +47,7 @@ public class ProductController(IProductService productService) : Controller
 
         productService.DeleteProduct(id);
 
-        return Ok();
+        return NoContent();
     }
 
 

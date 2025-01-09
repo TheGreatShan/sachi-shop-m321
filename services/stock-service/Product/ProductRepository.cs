@@ -7,6 +7,7 @@ namespace stock;
 public interface IProductRepository
 {
     ProductInformation GetProductById(Guid id);
+    List<ProductInformation> GetAllProducts();
     ProductRecord CreateProduct(ProductInput product);
     ProductRecord UpdateProduct(Guid id, ProductInput product);
     void DeleteProduct(Guid id);
@@ -26,18 +27,22 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
                     WHERE p.id = @Id ",
             new {Id = id}).FirstOrDefault();
 
-        var informations = dbConnection.Query<DbInformation>(
+        return GetProductInformation(product);
+
+    }
+    public List<ProductInformation> GetAllProducts()
+    {
+        var product = dbConnection.Query<ProductRecord>(
             @"SELECT
-                        i.id AS Id, 
-                        i.productId AS ProductId,
-                        i.information AS Information,
-                        i.stage AS Stage
-                    FROM Information i  
-                    WHERE i.productId = @Id ",
-            new {Id = id}).ToList();
+                        p.id AS Id, 
+                        p.product AS Product,
+                        p.description AS Description,
+                        p.stock AS Stock
+                    FROM Product p").ToList();
 
-        return product?.ToProductInformation(informations.ToInformation());
 
+
+        return product?.Select(GetProductInformation).ToList();
     }
 
     public ProductRecord CreateProduct(ProductInput product)
@@ -66,7 +71,21 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
 
     public void DeleteProduct(Guid id)
     {
-        dbConnection.Execute("DELETE FROM Product WHERE id = @Id", new {Id = id});
         dbConnection.Execute("DELETE FROM Information WHERE productId = @Id", new {Id = id});
+        dbConnection.Execute("DELETE FROM Product WHERE id = @Id", new {Id = id});
+    }
+
+    private ProductInformation GetProductInformation(ProductRecord p)
+    {
+        var informations = dbConnection.Query<DbInformation>(@"SELECT
+                        i.id AS Id, 
+                        i.productId AS ProductId,
+                        i.information AS Information,
+                        i.stage AS Stage
+                    FROM Information i  
+                    WHERE i.productId = @Id ", new { p.Id })
+            .ToList();
+
+        return p.ToProductInformation(informations.ToInformation());
     }
 }
