@@ -15,9 +15,17 @@ func Receive(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+    topic := r.URL.Query().Get("topic")
+    if topic == "" {
+        w.WriteHeader(http.StatusBadRequest)
+        response := map[string]interface{}{"message": "Missing 'topic' query parameter"}
+        json.NewEncoder(w).Encode(response)
+        return
+    }
+
     messageString := fmt.Sprintf("%v", message)
 
-    ProduceEvent(messageString)
+    ProduceEvent(messageString, topic)
 
     w.WriteHeader(http.StatusOK)
     json.NewEncoder(w).Encode(message)

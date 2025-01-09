@@ -9,11 +9,14 @@ import (
 	"logging-service/utils"
 )
 
-func main() {
+func setup() {
 	utils.InitializeDatabase()
-	// utils.ConnectEureka()
-	utils.ConsumeLogs()
+	utils.ConsumeListener()
+	utils.ConnectEureka()
+}
 
+func main() {
+	setup()
 
 	r := mux.NewRouter()
 	r.HandleFunc("/ping", handlers.HandlePing).Methods("GET")

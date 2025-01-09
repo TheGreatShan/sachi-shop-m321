@@ -30,7 +30,7 @@ func ConsumeLogs() {
 	for run {
 		msg, err := c.ReadMessage(time.Second)
 		if err == nil {
-			fmt.Printf("Message on %s: %s\n", msg.TopicPartition, string(msg.Value))
+			SaveLog(string(msg.Value))
 		} else if !err.(kafka.Error).IsTimeout() {
 			fmt.Printf("Consumer error: %v (%v)\n", err, msg)
 		}
