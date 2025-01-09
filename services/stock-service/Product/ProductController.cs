@@ -5,11 +5,11 @@ namespace stock;
 public class ProductController(IProductService productService) : Controller
 {
     [HttpGet("/products/{id}")]
-    public ActionResult GetProductById(Guid id)
+    public ActionResult<ProductInformationPayload> GetProductById(Guid id)
     {
         if (id == Guid.Empty)
             return BadRequest();
-        var product = productService.GetProductById(id);
+        var product = productService.GetProductById(id).ToPayload();
         return product == null ? NotFound() : Ok(product);
     }
 

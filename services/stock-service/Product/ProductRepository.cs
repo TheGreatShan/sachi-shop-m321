@@ -26,7 +26,7 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
                     WHERE p.id = @Id ",
             new {Id = id}).FirstOrDefault();
 
-        var informations = dbConnection.Query<InformationRecord>(
+        var informations = dbConnection.Query<DbInformation>(
             @"SELECT
                         i.id AS Id, 
                         i.productId AS ProductId,
@@ -36,7 +36,7 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
                     WHERE i.productId = @Id ",
             new {Id = id}).ToList();
 
-        return product?.ToProductInformation(informations);
+        return product?.ToProductInformation(informations.ToInformation());
 
     }
 
