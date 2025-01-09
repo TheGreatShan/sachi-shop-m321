@@ -4,10 +4,13 @@ namespace stock;
 
 public class ProductController(IProductService productService) : Controller
 {
-    [HttpGet("/products")]
-    public string GetAllProducts()
+    [HttpGet("/products/{id}")]
+    public ActionResult GetProductById(Guid id)
     {
-        return "Get all products";
+        if (id == Guid.Empty)
+            return BadRequest();
+        var product = productService.GetProductById(id);
+        return product == null ? NotFound() : Ok(product);
     }
 
     [HttpPost("/products")]

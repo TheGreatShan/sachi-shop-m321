@@ -1,10 +1,12 @@
 using System.Data;
 using Dapper;
+using Microsoft.VisualBasic;
 
 namespace stock;
 
 public interface IProductRepository
 {
+    ProductInformation GetProductById(Guid id);
     ProductRecord CreateProduct(ProductInput product);
     ProductRecord UpdateProduct(Guid id, ProductInput product);
     void DeleteProduct(Guid id);
@@ -12,6 +14,32 @@ public interface IProductRepository
 
 public class ProductRepository(IDbConnection dbConnection) : IProductRepository
 {
+    public ProductInformation GetProductById(Guid id)
+    {
+        var product = dbConnection.Query<ProductRecord>(
+            @"SELECT
+                        p.id AS Id, 
+                        p.product AS Product,
+                        p.description AS Description,
+                        p.stock AS Stock
+                    FROM Product p  
+                    WHERE p.id = @Id ",
+            new {Id = id}).FirstOrDefault();
+
+        var informations = dbConnection.Query<InformationRecord>(
+            @"SELECT
+                        i.id AS Id, 
+                        i.productId AS ProductId,
+                        i.information AS Information,
+                        i.stage AS Stage
+                    FROM Information i  
+                    WHERE i.productId = @Id ",
+            new {Id = id}).ToList();
+
+        return product?.ToProductInformation(informations);
+
+    }
+
     public ProductRecord CreateProduct(ProductInput product)
     {
         var dbProduct = new ProductRecord(Guid.NewGuid(), product.Product, product.Description, product.Stock);
@@ -39,5 +67,6 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
     public void DeleteProduct(Guid id)
     {
         dbConnection.Execute("DELETE FROM Product WHERE id = @Id", new {Id = id});
+        dbConnection.Execute("DELETE FROM Information WHERE productId = @Id", new {Id = id});
     }
 }

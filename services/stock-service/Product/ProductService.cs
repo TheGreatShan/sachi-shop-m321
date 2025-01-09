@@ -2,6 +2,7 @@ namespace stock;
 
 public interface IProductService
 {
+    ProductInformation GetProductById(Guid id);
     ProductRecord CreateProduct(ProductInput product);
     ProductRecord UpdateProduct(Guid id, ProductInput product);
     void DeleteProduct(Guid id);
@@ -10,6 +11,9 @@ public interface IProductService
 
 public class ProductService(IProductRepository productRepository) : IProductService
 {
+    public ProductInformation GetProductById(Guid id) =>
+        productRepository.GetProductById(id);
+
     public ProductRecord CreateProduct(ProductInput product) =>
         productRepository.CreateProduct(product);
 
