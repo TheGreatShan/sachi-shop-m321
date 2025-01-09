@@ -6,8 +6,6 @@ public record ProductInformation(ProductRecord Product, List<InformationRecord> 
 
 public record ProductInput(string Product, string Description, int Stock);
 
-public record InformationRecord(Guid Id, Guid ProductId, string Information, string Stage);
-
 public static class ProductExtensions
 {
     public static ProductInformation ToProductInformation(this ProductRecord product,
