@@ -25,11 +25,11 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
                         p.stock AS Stock
                     FROM Product p  
                     WHERE p.id = @Id ",
-            new {Id = id}).FirstOrDefault();
+            new { Id = id }).FirstOrDefault();
 
         return GetProductInformation(product);
-
     }
+
     public List<ProductInformation> GetAllProducts()
     {
         var product = dbConnection.Query<ProductRecord>(
@@ -39,7 +39,6 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
                         p.description AS Description,
                         p.stock AS Stock
                     FROM Product p").ToList();
-
 
 
         return product?.Select(GetProductInformation).ToList();
@@ -71,8 +70,8 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
 
     public void DeleteProduct(Guid id)
     {
-        dbConnection.Execute("DELETE FROM Information WHERE productId = @Id", new {Id = id});
-        dbConnection.Execute("DELETE FROM Product WHERE id = @Id", new {Id = id});
+        dbConnection.Execute("DELETE FROM Information WHERE productId = @Id", new { Id = id });
+        dbConnection.Execute("DELETE FROM Product WHERE id = @Id", new { Id = id });
     }
 
     private ProductInformation GetProductInformation(ProductRecord p)
