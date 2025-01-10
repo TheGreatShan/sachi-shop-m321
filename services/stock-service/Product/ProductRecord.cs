@@ -21,4 +21,6 @@ internal static class ProductExtensions
 
     public static List<ProductInformationPayload> ToPayload(this List<ProductInformation> products) =>
         products.Select(products => products.ToPayload()).ToList();
+    public static ProductInput ToProductInput(this ProductRecord product) =>
+        new (product.Product, product.Description, product.Stock);
 }

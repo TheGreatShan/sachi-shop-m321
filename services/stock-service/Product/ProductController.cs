@@ -7,10 +7,10 @@ public class ProductController(IProductService productService) : Controller
     [HttpGet("/products")]
     public ActionResult<ProductInformationPayload> GetAllProducts()
     {
-
         var product = productService.GetAllProducts().ToPayload();
         return product == null ? NotFound() : Ok(product);
     }
+
     [HttpGet("/products/{id}")]
     public ActionResult<ProductInformationPayload> GetProductById(Guid id)
     {
@@ -37,6 +37,17 @@ public class ProductController(IProductService productService) : Controller
 
         var updatedProduct = productService.UpdateProduct(id, product);
         return Ok(updatedProduct);
+    }
+
+    [HttpPut("/products/stock/{id}")]
+    public ActionResult<ProductRecord> DecreaseStockByOne(Guid id)
+    {
+        if (id == Guid.Empty)
+            return BadRequest();
+
+        var updatedProduct = productService.DecreaseStockByOne(id);
+
+        return updatedProduct;
     }
 
     [HttpDelete("/products/{id}")]
