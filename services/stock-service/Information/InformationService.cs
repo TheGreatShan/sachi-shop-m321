@@ -9,7 +9,8 @@ public interface IInformationService
     Task<InformationResult<Guid>> CreateInformation(InformationInput input);
 }
 
-public class InformationService(IInformationRepository informationRepository) : IInformationService
+public class InformationService
+    (IInformationRepository informationRepository, IProductRepository productRepository) : IInformationService
 {
     public async Task<InformationResult<List<InformationPayload>>> GetInformationByProductId(Guid productId)
     {
@@ -39,7 +40,7 @@ public class InformationService(IInformationRepository informationRepository) : 
 
     public async Task<InformationResult<Guid>> CreateInformation(InformationInput informationInput)
     {
-        if (!IsInputValid(informationInput))
+        if (!IsInputValid(informationInput) || !await productRepository.DoesExist(informationInput.ProductId))
             return new BadRequest<Guid>();
 
         var informationRecord = informationInput.ToInformation();
@@ -54,7 +55,7 @@ public class InformationService(IInformationRepository informationRepository) : 
     private static bool IsInputValid(InformationInput input)
     {
         if (input.ProductId == Guid.Empty || input.ProductId == null || input.Information.IsNullOrEmpty() ||
-            input.Stage.IsNullOrEmpty())
+            input.Stage.IsNullOrEmpty() || !Enum.TryParse<Stage>(input.Stage, out _))
             return false;
         return true;
     }

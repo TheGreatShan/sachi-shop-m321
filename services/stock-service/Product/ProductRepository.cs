@@ -11,6 +11,7 @@ public interface IProductRepository
     ProductRecord CreateProduct(ProductInput product);
     ProductRecord UpdateProduct(Guid id, ProductInput product);
     void DeleteProduct(Guid id);
+    Task<bool> DoesExist(Guid id);
 }
 
 public class ProductRepository(IDbConnection dbConnection) : IProductRepository
@@ -72,6 +73,12 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
     {
         dbConnection.Execute("DELETE FROM Information WHERE productId = @Id", new { Id = id });
         dbConnection.Execute("DELETE FROM Product WHERE id = @Id", new { Id = id });
+    }
+
+    public async Task<bool> DoesExist(Guid id)
+    {
+        var exists = await dbConnection.QueryAsync<Guid>("SELECT id FROM Product WHERE id = @id", new { id });
+        return exists.Count() == 1;
     }
 
     private ProductInformation GetProductInformation(ProductRecord p)
