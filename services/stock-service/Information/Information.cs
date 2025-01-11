@@ -13,6 +13,7 @@ public record DbInformation(Guid Id, Guid ProductId, string Information, string 
 public record InformationRecord(Guid Id, Guid ProductId, string Information, Stage Stage);
 
 public record InformationPayload(Guid Id, Guid ProductId, string Information, string Stage);
+public record InformationInput(Guid ProductId, string Information, string Stage);
 
 internal static class InformationExtensions
 {
@@ -36,6 +37,9 @@ internal static class InformationExtensions
         return new InformationRecord(information.Id, information.ProductId, information.Information,
             Enum.Parse<Stage>(information.Stage));
     }
+    internal static InformationRecord ToInformation(this InformationInput information) =>
+        new(Guid.NewGuid(), information.ProductId, information.Information,
+            Enum.Parse<Stage>(information.Stage));
 
     internal static List<InformationPayload> ToPayload(this List<InformationRecord> information)
     {

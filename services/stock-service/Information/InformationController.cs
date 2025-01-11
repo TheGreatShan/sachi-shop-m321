@@ -33,4 +33,20 @@ public class InformationController(IInformationService informationService) : Con
             _ => throw new ArgumentOutOfRangeException()
         };
     }
+
+    [HttpPost("/information")]
+    public async Task<ActionResult<InformationRecord>> CreateInformation([FromBody] InformationInput input)
+    {
+        var information = await informationService.CreateInformation(input);
+
+        return information.Status switch
+        {
+            InformationResultType.BadRequest => BadRequest($"The given input: ({input}) is not valid"),
+            InformationResultType.Conflict => Conflict($"The given input: ({input}) was not created"),
+            InformationResultType.Ok => Ok(information.Data),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
+
+
 }

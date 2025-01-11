@@ -7,6 +7,7 @@ public interface IInformationRepository
 {
     Task<List<InformationRecord>> GetInformationByProductId(Guid productId);
     Task<InformationRecord> GetInformationById(Guid id);
+    Task<bool> CreateInformation(InformationRecord informationRecord);
 }
 
 public class InformationRepository(IDbConnection connection) : IInformationRepository
@@ -39,5 +40,18 @@ public class InformationRepository(IDbConnection connection) : IInformationRepos
             , new { id = id });
 
         return dbInfo.FirstOrDefault().ToInformation();
+    }
+
+    public async Task<bool> CreateInformation(InformationRecord informationRecord)
+    {
+        var confirm = await connection.ExecuteAsync(
+            "INSERT INTO Information (id, productId, information, stage) VALUES (@id, @productId, @information, @stage)",
+            new
+            {
+                id = informationRecord.Id, productId = informationRecord.ProductId,
+                information = informationRecord.Information, stage = informationRecord.Stage.ToString()
+            });
+
+        return confirm == 1;
     }
 }
