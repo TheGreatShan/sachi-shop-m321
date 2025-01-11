@@ -17,5 +17,8 @@ public class ApiModule
         services.AddSingleton<IDbConnection>(_ => SqlConnection.GetConnection());
         services.AddTransient<IProductService, ProductService>();
         services.AddTransient<IProductRepository, ProductRepository>();
+
+        services.AddTransient<IInformationRepository, InformationRepository>();
+        services.AddTransient<IInformationService, InformationService>();
     }
 }
