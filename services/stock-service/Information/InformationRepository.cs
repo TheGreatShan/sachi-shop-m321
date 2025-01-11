@@ -9,6 +9,7 @@ public interface IInformationRepository
     Task<InformationRecord> GetInformationById(Guid id);
     Task<bool> CreateInformation(InformationRecord informationRecord);
     Task<bool> DeleteByInformationId(Guid id);
+    Task<bool> DeleteByProductId(Guid productId);
     Task<bool> DoesExist(Guid id);
 }
 
@@ -61,6 +62,13 @@ public class InformationRepository(IDbConnection connection) : IInformationRepos
     {
         var confirm = await connection.ExecuteAsync("DELETE FROM Information WHERE id = @id", new { id });
         return confirm == 1;
+    }
+
+    public async Task<bool> DeleteByProductId(Guid productId)
+    {
+        var ack = await connection.ExecuteAsync("DELETE FROM Information WHERE productId = @id",
+            new { id = productId });
+        return ack == 1;
     }
 
     public async Task<bool> DoesExist(Guid id)
