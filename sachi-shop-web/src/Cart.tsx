@@ -3,13 +3,15 @@ import { useCart } from "./context/CartContext";
 export default function Cart() {
   const { cart, updateCart, clearCart } = useCart();
 
-  console.log(cart.length);
+  const totalItems = cart.reduce((acc, item) => acc + item.count, 0);
+
+  const totalCost = cart.reduce((acc, item) => acc + item.price * item.count, 0);
 
   return (
     <>
       <div className="pt-20">
         <div className="flex flex-col items-center pt-20">
-          <div className="text-2xl font-bold mb-5">Your Cart</div>
+          <div className="text-4xl font-bold mb-5">Your Cart</div>
           <div className="bg-gray-100 w-1/2 p-5 rounded-lg shadow-lg">
             {cart.length > 0 ? (
               <div>
@@ -72,6 +74,10 @@ export default function Cart() {
                 <button className="bg-gray-150 rounded-lg px-4 py-2 hover:bg-gray-200" onClick={clearCart}>
                     Clear Cart
                 </button>
+                <div className="grid grid-cols-2 mt-5">
+                  <div className="text-xl font-bold">Total Items: {totalItems}</div>
+                  <div className="text-xl text-red-500 font-bold justify-self-end">{totalCost.toFixed(1)}.-</div>
+                </div>
               </div>
             ) : (
               <div className="text-center">No Products</div>
