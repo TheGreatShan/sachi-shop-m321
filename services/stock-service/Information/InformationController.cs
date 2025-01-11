@@ -48,5 +48,17 @@ public class InformationController(IInformationService informationService) : Con
         };
     }
 
+    [HttpDelete("/information/{id}")]
+    public async Task<ActionResult<InformationRecord>> DeleteInformationById(Guid id)
+    {
+        var information = await informationService.DeleteInformation(id);
 
+        return information.Status switch
+        {
+            InformationResultType.BadRequest => BadRequest($"The given id: ({id}) is not valid"),
+            InformationResultType.Conflict => Conflict($"The given id: ({id}) could not be deleted"),
+            InformationResultType.Deleted => NoContent(),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
 }

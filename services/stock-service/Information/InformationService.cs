@@ -7,6 +7,7 @@ public interface IInformationService
     Task<InformationResult<List<InformationPayload>>> GetInformationByProductId(Guid productId);
     Task<InformationResult<InformationPayload>> GetInformationById(Guid id);
     Task<InformationResult<Guid>> CreateInformation(InformationInput input);
+    Task<InformationResult<Guid>> DeleteInformation(Guid id);
 }
 
 public class InformationService
@@ -50,6 +51,18 @@ public class InformationService
             return new Conflict<Guid>();
 
         return new Ok<Guid>(informationRecord.Id);
+    }
+
+    public async Task<InformationResult<Guid>> DeleteInformation(Guid id)
+    {
+        if (!await informationRepository.DoesExist(id))
+            return new BadRequest<Guid>();
+
+        var ack = await informationRepository.DeleteByInformationId(id);
+
+        return ack
+            ? new Deleted<Guid>()
+            : new Conflict<Guid>();
     }
 
     private static bool IsInputValid(InformationInput input)
