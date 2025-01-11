@@ -1,15 +1,9 @@
 namespace stock;
 
-public abstract class InformationResult<T>
+public abstract class InformationResult<T>(InformationResultType status, T data)
 {
-    public InformationResultType Status { get; set; }
-    public T? Data { get; set; }
-
-    public InformationResult(InformationResultType status, T data)
-    {
-        Status = status;
-        Data = data;
-    }
+    public InformationResultType Status { get; set; } = status;
+    public T? Data { get; set; } = data;
 }
 
 public class BadRequest<T>(T data = default) : InformationResult<T>(InformationResultType.BadRequest, data);

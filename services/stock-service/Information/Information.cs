@@ -43,8 +43,16 @@ internal static class InformationExtensions
             return null;
 
         return information
-            .Select(x =>
-                new InformationPayload(x.Id, x.ProductId, x.Information, x.Stage.ToString()))
+            .Select(ToPayload)
             .ToList();
+    }
+
+    internal static InformationPayload ToPayload(this InformationRecord information)
+    {
+        if (information == null)
+            return null;
+
+        return new InformationPayload(information.Id, information.ProductId, information.Information,
+            information.Stage.ToString());
     }
 }
