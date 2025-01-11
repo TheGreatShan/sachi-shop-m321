@@ -8,7 +8,8 @@ CREATE TABLE Product (
                          id UUID PRIMARY KEY,
                          product VARCHAR(255) NOT NULL,
                          description TEXT,
-                         stock INT NOT NULL DEFAULT 0
+                         stock INT NOT NULL DEFAULT 0,
+                         price FLOAT NOT NULL DEFAULT 0
 );
 
 -- Create table for Information

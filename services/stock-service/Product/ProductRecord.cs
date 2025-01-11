@@ -1,12 +1,12 @@
 namespace stock;
 
-public record ProductRecord(Guid Id, string Product, string Description, int Stock);
+public record ProductRecord(Guid Id, string Product, string Description, int Stock, double Price);
 
 public record ProductInformation(ProductRecord Product, List<InformationRecord> Informations);
 
 public record ProductInformationPayload(ProductRecord Product, List<InformationPayload> Informations);
 
-public record ProductInput(string Product, string Description, int Stock);
+public record ProductInput(string Product, string Description, int Stock, double Price);
 
 internal static class ProductExtensions
 {
@@ -22,5 +22,5 @@ internal static class ProductExtensions
     public static List<ProductInformationPayload> ToPayload(this List<ProductInformation> products) =>
         products.Select(products => products.ToPayload()).ToList();
     public static ProductInput ToProductInput(this ProductRecord product) =>
-        new (product.Product, product.Description, product.Stock);
+        new (product.Product, product.Description, product.Stock, product.Price);
 }
