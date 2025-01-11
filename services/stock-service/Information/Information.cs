@@ -37,8 +37,8 @@ internal static class InformationExtensions
         return new InformationRecord(information.Id, information.ProductId, information.Information,
             Enum.Parse<Stage>(information.Stage));
     }
-    internal static InformationRecord ToInformation(this InformationInput information) =>
-        new(Guid.NewGuid(), information.ProductId, information.Information,
+    internal static InformationRecord ToInformation(this InformationInput information, Guid id) =>
+        new(id, information.ProductId, information.Information,
             Enum.Parse<Stage>(information.Stage));
 
     internal static List<InformationPayload> ToPayload(this List<InformationRecord> information)

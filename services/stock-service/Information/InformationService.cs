@@ -6,7 +6,8 @@ public interface IInformationService
 {
     Task<InformationResult<List<InformationPayload>>> GetInformationByProductId(Guid productId);
     Task<InformationResult<InformationPayload>> GetInformationById(Guid id);
-    Task<InformationResult<Guid>> CreateInformation(InformationInput input);
+    Task<InformationResult<InformationPayload>> CreateInformation(InformationInput input);
+    Task<InformationResult<InformationPayload>> UpdateInformation(Guid id, InformationInput input);
     Task<InformationResult<Guid>> DeleteInformationById(Guid id);
     Task<InformationResult<Guid>> DeleteInformationByProductId(Guid id);
 }
@@ -40,18 +41,33 @@ public class InformationService
         return new Ok<InformationPayload>(information.ToPayload());
     }
 
-    public async Task<InformationResult<Guid>> CreateInformation(InformationInput informationInput)
+    public async Task<InformationResult<InformationPayload>> CreateInformation(InformationInput informationInput)
     {
         if (!IsInputValid(informationInput) || !await productRepository.DoesExist(informationInput.ProductId))
-            return new BadRequest<Guid>();
+            return new BadRequest<InformationPayload>();
 
-        var informationRecord = informationInput.ToInformation();
+        var informationRecord = informationInput.ToInformation(Guid.NewGuid());
         var ack = await informationRepository.CreateInformation(informationRecord);
 
         if (!ack)
-            return new Conflict<Guid>();
+            return new Conflict<InformationPayload>();
 
-        return new Ok<Guid>(informationRecord.Id);
+        return new Ok<InformationPayload>(informationRecord.ToPayload());
+    }
+
+    public async Task<InformationResult<InformationPayload>> UpdateInformation(Guid id,
+        InformationInput informationInput)
+    {
+        if (!IsInputValid(informationInput) || !await productRepository.DoesExist(informationInput.ProductId))
+            return new BadRequest<InformationPayload>();
+
+        var informationRecord = informationInput.ToInformation(id);
+        var ack = await informationRepository.UpdateInformation(informationRecord);
+
+        if (!ack)
+            return new Conflict<InformationPayload>();
+
+        return new Ok<InformationPayload>(informationRecord.ToPayload());
     }
 
     public async Task<InformationResult<Guid>> DeleteInformationById(Guid id)

@@ -8,6 +8,7 @@ public interface IInformationRepository
     Task<List<InformationRecord>> GetInformationByProductId(Guid productId);
     Task<InformationRecord> GetInformationById(Guid id);
     Task<bool> CreateInformation(InformationRecord informationRecord);
+    Task<bool> UpdateInformation(InformationRecord informationRecord);
     Task<bool> DeleteByInformationId(Guid id);
     Task<bool> DeleteByProductId(Guid productId);
     Task<bool> DoesExist(Guid id);
@@ -56,6 +57,19 @@ public class InformationRepository(IDbConnection connection) : IInformationRepos
             });
 
         return confirm == 1;
+    }
+
+    public async Task<bool> UpdateInformation(InformationRecord informationRecord)
+    {
+        var ack = await connection.ExecuteAsync(
+            "UPDATE Information SET productId = @productId, information = @information, stage = @stage WHERE id = @id",
+            new
+            {
+                id = informationRecord.Id,
+                productId = informationRecord.ProductId, information = informationRecord.Information,
+                stage = informationRecord.Stage
+            });
+        return ack == 1;
     }
 
     public async Task<bool> DeleteByInformationId(Guid id)

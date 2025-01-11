@@ -35,7 +35,7 @@ public class InformationController(IInformationService informationService) : Con
     }
 
     [HttpPost("/information")]
-    public async Task<ActionResult<InformationRecord>> CreateInformation([FromBody] InformationInput input)
+    public async Task<ActionResult<InformationPayload>> CreateInformation([FromBody] InformationInput input)
     {
         var information = await informationService.CreateInformation(input);
 
@@ -43,6 +43,19 @@ public class InformationController(IInformationService informationService) : Con
         {
             InformationResultType.BadRequest => BadRequest($"The given input: ({input}) is not valid"),
             InformationResultType.Conflict => Conflict($"The given input: ({input}) was not created"),
+            InformationResultType.Ok => Ok(information.Data),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
+    [HttpPut("/information/{id}")]
+    public async Task<ActionResult<InformationPayload>> UpdateInformation(Guid id, [FromBody] InformationInput input)
+    {
+        var information = await informationService.UpdateInformation(id, input);
+
+        return information.Status switch
+        {
+            InformationResultType.BadRequest => BadRequest($"The given input: ({input}) is not valid"),
+            InformationResultType.Conflict => Conflict($"The given input: ({input}) was not updated"),
             InformationResultType.Ok => Ok(information.Data),
             _ => throw new ArgumentOutOfRangeException()
         };
