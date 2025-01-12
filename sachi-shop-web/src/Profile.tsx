@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 export default function Profile() {
     return(
         <>
@@ -37,6 +39,13 @@ export default function Profile() {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div className="mt-5 text-center">
+                            <Link to={"/dashboard"}>
+                                <button className="bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-blue-600">
+                                    Admin Dashboard
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
