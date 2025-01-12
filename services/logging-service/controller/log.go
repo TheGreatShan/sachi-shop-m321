@@ -36,7 +36,8 @@ func HandleGetLogs(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var logs []structs.Log
-	result := db.ActiveDb.Find(&logs)
+	result := db.ActiveDb.Order("created_at desc").Find(&logs)
+
 	if result.Error != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		response := structs.Response{Message: "Failed to retrieve logs"}
@@ -47,6 +48,7 @@ func HandleGetLogs(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(logs)
 }
+
 
 
 func HandlePostLog(w http.ResponseWriter, r *http.Request) {
