@@ -1,26 +1,30 @@
 import './App.css'
 import testData from "./json/testData.json"
-import Product from './components/Product'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { getAllProducts, Product as ProductType, getProductOutOfProductInfo } from './api/stock';
+import Product from './components/Product';
 
-interface Product {
-  id: string;
-  product: string;
-  description: string;
-  stock: number;
-  price: number;
-}
+
 
 function App() {
 
-  const [products, setProducts] = useState<Product[]>(testData);  
+  const [products, setProducts] = useState<ProductType[]>(testData);  
+
+  useEffect(() => {
+    const getProducts = async () => {
+      const resp = await getAllProducts()
+      setProducts(getProductOutOfProductInfo(resp))
+    }
+
+    getProducts()
+  }, [])
 
   return (
     <>
       <div className='pt-20'>
         {
-          testData.map((item, index) => {
+          products.map((item, index) => {
             return (
               <div key={index}>
                 <Product
