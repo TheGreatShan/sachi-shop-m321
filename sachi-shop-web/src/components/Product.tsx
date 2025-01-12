@@ -17,6 +17,7 @@ interface CartProductProps {
   price: number;
 }
 
+
 export default function CartProduct({
   id,
   product,
