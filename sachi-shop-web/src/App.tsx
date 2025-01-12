@@ -18,7 +18,7 @@ function App() {
     }
 
     getProducts()
-  })
+  }, [])
 
   return (
     <>

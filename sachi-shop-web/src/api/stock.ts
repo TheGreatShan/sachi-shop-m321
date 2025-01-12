@@ -21,7 +21,7 @@ export interface ProductInfo {
 }
 
 export async function getAllProducts() : Promise<ProductInfo[]> {
-    const apiUrl = import.meta.env.VITE_STOCK_API_URL + '/products';
+    const apiUrl = import.meta.env.VITE_STOCK_API_URL + '/stock-service/products';
     const {data} = await axios.get<ProductInfo[]>(apiUrl);
     
     return data
