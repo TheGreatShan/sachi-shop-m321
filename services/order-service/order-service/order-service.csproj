@@ -21,6 +21,8 @@
         <PackageReference Include="Steeltoe.Discovery.Eureka" Version="3.2.8" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 
+
+
     </ItemGroup>
 
 

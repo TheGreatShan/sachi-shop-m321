@@ -11,6 +11,8 @@ public class OrderController(IOrderService service) : ControllerBase
         return createdOrder.Status switch
         {
             OrderResultType.Ok => Ok(createdOrder.Data),
+            OrderResultType.NotFound => NotFound(createdOrder.Message),
+            OrderResultType.Conflict => Conflict(createdOrder.Message),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
