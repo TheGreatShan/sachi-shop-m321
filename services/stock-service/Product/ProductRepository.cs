@@ -28,11 +28,14 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
                     FROM Product p  
                     WHERE p.id = @Id ",
             new { Id = id }).FirstOrDefault();
+        if (product == default)
+            return default;
 
         return GetProductInformation(RoundPrice(product));
     }
 
-    private static ProductRecord RoundPrice(ProductRecord? product) => product with{Price = Math.Round(product.Price, 2)};
+    private static ProductRecord RoundPrice(ProductRecord? product) =>
+        product with { Price = Math.Round(product.Price, 2) };
 
     public List<ProductInformation> GetAllProducts()
     {
@@ -51,7 +54,8 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
 
     public ProductRecord CreateProduct(ProductInput product)
     {
-        var dbProduct = new ProductRecord(Guid.NewGuid(), product.Product, product.Description, product.Stock, product.Price);
+        var dbProduct = new ProductRecord(Guid.NewGuid(), product.Product, product.Description, product.Stock,
+            product.Price);
         dbConnection.Query(
             "INSERT INTO Product (id, product, description, stock, price) VALUES (@Id, @Product, @Description, @Stock, @Price)",
             new
@@ -68,7 +72,8 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
             "UPDATE Product SET product = @Product, description = @Description, stock = @Stock, price = @Price WHERE id = @Id",
             new
             {
-                Product = product.Product, Description = product.Description, Stock = product.Stock, Id = id, price = product.Price
+                Product = product.Product, Description = product.Description, Stock = product.Stock, Id = id,
+                price = product.Price
             });
         return new ProductRecord(id, product.Product, product.Description, product.Stock, product.Price);
     }
