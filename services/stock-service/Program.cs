@@ -9,6 +9,15 @@ public class Program
 
         var apiModule = new ApiModule();
         apiModule.ConfigureServices(builder.Services);
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(name: "Cors Frontend",
+                policy  =>
+                {
+                    policy.WithOrigins("http://localhost:5173",
+                        "http://localhost:5173");
+                });
+        });
 
         var app = builder.Build();
 
@@ -17,7 +26,8 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-        
+
+        app.UseCors("Cors Frontend");
         app.UseDiscoveryClient();
         app.UseHttpsRedirection();
         app.MapControllers();
