@@ -17,7 +17,7 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
+        
         app.UseDiscoveryClient();
         app.UseHttpsRedirection();
         app.MapControllers();

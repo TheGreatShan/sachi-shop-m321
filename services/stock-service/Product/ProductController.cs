@@ -50,6 +50,17 @@ public class ProductController(IProductService productService) : Controller
         return updatedProduct;
     }
 
+    [HttpPut("/products/increase/{id}")]
+    public ActionResult<ProductRecord> IncreaseStockByOne(Guid id)
+    {
+        if (id == Guid.Empty)
+            return BadRequest();
+
+        var updatedProduct = productService.IncreaseStockByOne(id);
+
+        return updatedProduct;
+    }
+
     [HttpDelete("/products/{id}")]
     public ActionResult UpdateProduct(Guid id)
     {
