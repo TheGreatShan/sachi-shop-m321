@@ -8,6 +8,8 @@ namespace order_service.Order;
 public interface IOrderService
 {
     Task<OrderResult<Order>> CreateOrder(OrderInput orderInput);
+    Task<OrderResult<OrderPayload>> GetOrderById(Guid id);
+    Task<OrderResult<List<OrderPayload>>> GetOrderByEmail(string email);
 }
 
 public class OrderService
@@ -32,5 +34,33 @@ public class OrderService
 
         var order = await orderRepository.CreateOrder(orderInput);
         return new Ok<Order>(order);
+    }
+
+    public async Task<OrderResult<OrderPayload>> GetOrderById(Guid id)
+    {
+        if (id == Guid.Empty)
+        {
+            return new BadRequest<OrderPayload>("id cannot be empty");
+        }
+
+        var order = await orderRepository.GetOrderById(id);
+
+        return order == null
+            ? new NotFound<OrderPayload>($"Could not find order with id: {id}")
+            : new Ok<OrderPayload>(order);
+    }
+
+    public async Task<OrderResult<List<OrderPayload>>> GetOrderByEmail(string email)
+    {
+        if (string.IsNullOrEmpty(email))
+        {
+            return new BadRequest<List<OrderPayload>>("email cannot be empty");
+        }
+
+        var orders = await orderRepository.GetOrdersByEmail(email);
+
+        return orders.Count == 0
+            ? new NotFound<List<OrderPayload>>($"No orders for user with email: {email}")
+            : new Ok<List<OrderPayload>>(orders);
     }
 }

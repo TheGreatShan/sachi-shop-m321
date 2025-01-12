@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
+using order_service.Inventory;
 
 namespace order_service.Order;
 
@@ -24,6 +25,8 @@ public class ProductOrder(Guid id, Guid orderId, Guid productId)
 }
 
 public record OrderInput(string Email, DateTime DateTime, List<Guid> ProductIds);
+
+public record OrderPayload(Guid id, string Email, DateTime DateTime, List<Guid> ProductIds);
 
 internal static class OrderExtension
 {
