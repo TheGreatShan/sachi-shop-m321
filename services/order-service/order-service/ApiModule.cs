@@ -27,5 +27,6 @@ public class ApiModule
         services.AddServiceDiscovery(options => options.UseEureka());
 
         services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IOrderService, OrderService>();
     }
 }
