@@ -1,4 +1,4 @@
-package handlers
+package controller
 
 import (
 	"encoding/json"
@@ -21,6 +21,22 @@ func HandleGetLogByUser(w http.ResponseWriter, r *http.Request) {
 
 	var logs []structs.Log
 	result := db.ActiveDb.Where("user = ?", user).Find(&logs)
+	if result.Error != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		response := structs.Response{Message: "Failed to retrieve logs"}
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(logs)
+}
+
+func HandleGetLogs(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var logs []structs.Log
+	result := db.ActiveDb.Find(&logs)
 	if result.Error != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		response := structs.Response{Message: "Failed to retrieve logs"}
