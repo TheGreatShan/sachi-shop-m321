@@ -15,9 +15,15 @@ public class OrderService
 {
     public async Task<OrderResult<Order>> CreateOrder(OrderInput orderInput)
     {
+        if (orderInput.ProductIds.Count == 0)
+        {
+            return new BadRequest<Order>("Order cannot be empty");
+        }
+
         foreach (var productId in orderInput.ProductIds)
         {
-            var discoveryProduct = await Inventory.Inventory.GetProductFromInventory(productId, discoveryClient, client);
+            var discoveryProduct =
+                await Inventory.Inventory.GetProductFromInventory(productId, discoveryClient, client);
             if (discoveryProduct == null)
                 return new NotFound<Order>($"The following product id does not exist: {productId}");
             if (discoveryProduct.Product.Stock <= 0)
