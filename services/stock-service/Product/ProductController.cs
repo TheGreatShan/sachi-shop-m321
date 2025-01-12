@@ -16,8 +16,8 @@ public class ProductController(IProductService productService) : Controller
     {
         if (id == Guid.Empty)
             return BadRequest();
-        var product = productService.GetProductById(id).ToPayload();
-        return product == null ? NotFound() : Ok(product);
+        var product = productService.GetProductById(id);
+        return product == null ? NotFound() : Ok(product.ToPayload());
     }
 
     [HttpPost("/products")]

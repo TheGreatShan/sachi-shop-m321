@@ -8,7 +8,7 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         var apiModule = new ApiModule();
-        apiModule.ConfigureServices(builder.Services);
+        apiModule.ConfigureServices(builder.Services, builder);
 
         var app = builder.Build();
 
@@ -17,6 +17,8 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+
         app.UseDiscoveryClient();
         app.MapControllers();
         app.UseHttpsRedirection();

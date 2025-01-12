@@ -1,14 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
-using order_service.Db;
 
 namespace order_service.Order;
 
-public class OrderController(IOrderRepository repository) : Controller
+public class OrderController(IOrderService service) : ControllerBase
 {
     [HttpPost("/order")]
     public async Task<ActionResult<Order>> CreateNewOrder([FromBody] OrderInput order)
     {
-        var createdOrder = await repository.CreateOrder(order);
-        return Ok(createdOrder);
+        var createdOrder = await service.CreateOrder(order);
+        return createdOrder.Status switch
+        {
+            OrderResultType.Ok => Ok(createdOrder.Data),
+            OrderResultType.NotFound => NotFound(createdOrder.Message),
+            OrderResultType.Conflict => Conflict(createdOrder.Message),
+            OrderResultType.BadRequest => BadRequest(createdOrder.Message),
+            _ => throw new ArgumentOutOfRangeException()
+        };
     }
 }

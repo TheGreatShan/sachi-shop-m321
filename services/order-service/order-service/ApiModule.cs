@@ -9,7 +9,7 @@ namespace order_service;
 
 public class ApiModule
 {
-    public void ConfigureServices(IServiceCollection services)
+    public void ConfigureServices(IServiceCollection services, WebApplicationBuilder builder)
     {
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
@@ -24,8 +24,11 @@ public class ApiModule
                 ServerVersion.AutoDetect(connectionString));
         });
         services.AddControllers();
+
+        services.AddDiscoveryClient(builder.Configuration);
         services.AddServiceDiscovery(options => options.UseEureka());
 
         services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IOrderService, OrderService>();
     }
 }
