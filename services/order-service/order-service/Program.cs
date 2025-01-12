@@ -1,4 +1,5 @@
 using order_service;
+using Steeltoe.Discovery.Client;
 
 public class Program
 {
@@ -16,7 +17,7 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
+        app.UseDiscoveryClient();
         app.MapControllers();
         app.UseHttpsRedirection();
 
