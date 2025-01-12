@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using order_service.Inventory;
 using Steeltoe.Discovery;
 using Steeltoe.Discovery.Eureka;
 
@@ -26,11 +27,13 @@ public class OrderService
         foreach (var productId in orderInput.ProductIds)
         {
             var discoveryProduct =
-                await Inventory.Inventory.GetProductFromInventory(productId, discoveryClient, client);
+                await Inventory.InventoryEurekaOps.GetProductFromInventory(productId, discoveryClient, client);
             if (discoveryProduct == null)
                 return new NotFound<Order>($"The following product id does not exist: {productId}");
             if (discoveryProduct.Product.Stock <= 0)
                 return new Conflict<Order>($"The following product is out of stock: {productId}");
+
+            InventoryEurekaOps.DecreaseStockByOne(productId, discoveryClient, client);
         }
 
         var order = await orderRepository.CreateOrder(orderInput);
