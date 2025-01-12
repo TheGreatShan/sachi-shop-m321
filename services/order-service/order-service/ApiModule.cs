@@ -1,6 +1,7 @@
 using System.Data;
 using Microsoft.EntityFrameworkCore;
 using order_service.Db;
+using order_service.Order;
 using Steeltoe.Discovery.Client;
 using Steeltoe.Discovery.Eureka;
 
@@ -24,5 +25,7 @@ public class ApiModule
         });
         services.AddControllers();
         services.AddServiceDiscovery(options => options.UseEureka());
+
+        services.AddScoped<IOrderRepository, OrderRepository>();
     }
 }
