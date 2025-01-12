@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, ReactNode } from "react";
+import { produceLog } from "../api/log";
 
 interface CartProduct {
   id: string;
@@ -10,12 +11,20 @@ interface CartProduct {
 }
 
 interface Product {
-    id: string;
-    product: string;
-    description: string;
-    stock: number;
-    price: number;
-  }
+  id: string;
+  product: string;
+  description: string;
+  stock: number;
+  price: number;
+}
+
+  
+interface Log {
+  level: string;
+  message: string;
+  timestamp: Date;
+  user: string;
+}
 
 interface CartContextType {
   cart: CartProduct[];
@@ -42,9 +51,18 @@ const CartContext = createContext<CartContextType>(defaultCartContext);
 export const CartProvider = ({ children }: CartProviderProps) => {
   const [cart, setCart] = useState<CartProduct[]>([]);
 
-  const addToCart = (product: Product) => {
+  const addToCart = async (product: Product) => {
     setCart((prevCart) => {
       const productExists = prevCart.find((item) => item.id === product.id);
+      const now = new Date()
+      
+      const log : Log = {
+        "level": "INFO",
+        "message": "Added Product " + product.product + " To Cart",
+        "timestamp": now,
+        "user": "john.doe@gmail.com"
+      }
+      produceLog(log)
 
       if (productExists) {
         return prevCart.map((item) =>
@@ -55,6 +73,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
       } else {
         return [...prevCart, { ...product, count: 1 }];
       }
+
     });
   };
 
