@@ -45,4 +45,18 @@ public class OrderController(IOrderService service) : ControllerBase
             _ => throw new ArgumentOutOfRangeException()
         };
     }
+
+    [HttpDelete("/order/{id}")]
+    public async Task<ActionResult<bool>> DeleteOrderById(Guid id)
+    {
+        var createdOrder = await service.DeleteOrderById(id);
+        return createdOrder.Status switch
+        {
+            OrderResultType.NotFound => NotFound(createdOrder.Message),
+            OrderResultType.Conflict => Conflict(createdOrder.Message),
+            OrderResultType.BadRequest => BadRequest(createdOrder.Message),
+            OrderResultType.NoContent => NoContent(),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
 }

@@ -10,6 +10,7 @@ public interface IOrderService
     Task<OrderResult<Order>> CreateOrder(OrderInput orderInput);
     Task<OrderResult<OrderPayload>> GetOrderById(Guid id);
     Task<OrderResult<List<OrderPayload>>> GetOrderByEmail(string email);
+    Task<OrderResult<bool>> DeleteOrderById(Guid id);
 }
 
 public class OrderService
@@ -62,5 +63,17 @@ public class OrderService
         return orders.Count == 0
             ? new NotFound<List<OrderPayload>>($"No orders for user with email: {email}")
             : new Ok<List<OrderPayload>>(orders);
+    }
+
+    public async Task<OrderResult<bool>> DeleteOrderById(Guid id)
+    {
+        if (id == Guid.Empty)
+            return new BadRequest<bool>("id cannot be empty");
+
+        var deleted = await orderRepository.DeleteOrder(id);
+
+        return deleted
+            ? new NoContent<bool>($"Deleted entry with id: {id}")
+            : new Conflict<bool>("Order could not be deleted");
     }
 }

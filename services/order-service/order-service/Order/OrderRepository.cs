@@ -9,6 +9,7 @@ public interface IOrderRepository
     Task<Order> CreateOrder(OrderInput orderInput);
     Task<OrderPayload> GetOrderById(Guid id);
     Task<List<OrderPayload>> GetOrdersByEmail(string email);
+    Task<bool> DeleteOrder(Guid id);
 }
 
 public class OrderRepository(MariaDbContext mariaDbContext) : IOrderRepository
@@ -50,7 +51,7 @@ public class OrderRepository(MariaDbContext mariaDbContext) : IOrderRepository
     public async Task<List<OrderPayload>> GetOrdersByEmail(string email)
     {
         var order = await mariaDbContext.Order
-            .Where(o => o.Email ==email)
+            .Where(o => o.Email == email)
             .Select(o => new OrderPayload(
                 o.Id,
                 o.Email,
@@ -64,5 +65,18 @@ public class OrderRepository(MariaDbContext mariaDbContext) : IOrderRepository
 
 
         return order;
+    }
+
+    public async Task<bool> DeleteOrder(Guid id)
+    {
+        var productOrder = await mariaDbContext.ProductOrders
+            .Where(x => x.OrderId == id)
+            .ExecuteDeleteAsync();
+
+        var order = await mariaDbContext.Order
+            .Where(x => x.Id == id)
+            .ExecuteDeleteAsync();
+
+        return productOrder == 1 && order == 1;
     }
 }
