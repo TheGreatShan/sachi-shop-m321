@@ -77,6 +77,6 @@ public class OrderRepository(MariaDbContext mariaDbContext) : IOrderRepository
             .Where(x => x.Id == id)
             .ExecuteDeleteAsync();
 
-        return productOrder == 1 && order == 1;
+        return productOrder != 0 && order != 0;
     }
 }

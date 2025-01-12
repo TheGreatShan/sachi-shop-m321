@@ -10,6 +10,7 @@ public interface IProductService
     ProductRecord CreateProduct(ProductInput product);
     ProductRecord UpdateProduct(Guid id, ProductInput product);
     ActionResult<ProductRecord> DecreaseStockByOne(Guid id);
+    ActionResult<ProductRecord> IncreaseStockByOne(Guid id);
     void DeleteProduct(Guid id);
 }
 
@@ -38,6 +39,17 @@ public class ProductService(IProductRepository productRepository) : IProductServ
             ? new OkObjectResult(productRepository.UpdateProduct(id,
                 product.Product.ToProductInput() with { Stock = product.Product.Stock - 1 }))
             : new BadRequestResult();
+    }
+
+    public ActionResult<ProductRecord> IncreaseStockByOne(Guid id)
+    {
+        var product = GetProductById(id);
+
+        if (product == null)
+            return new NotFoundResult();
+
+        return new OkObjectResult(productRepository.UpdateProduct(id,
+            product.Product.ToProductInput() with { Stock = product.Product.Stock + 1 }));
     }
 
     public void DeleteProduct(Guid id) =>
