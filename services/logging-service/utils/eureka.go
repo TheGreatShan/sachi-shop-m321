@@ -13,7 +13,7 @@ func ConnectEureka() {
 
 	instance := eureka.NewInstanceInfo("localhost", "logging-service", "logging-service-1", 8000, 30, false)
 
-	err := client.RegisterInstance("logging-service", instance) // Register new instance in your eureka(s)
+	err := client.RegisterInstance("logging-service", instance)
 	if err != nil {
 		log.Fatal("Error registering instance:", err)
 	}
