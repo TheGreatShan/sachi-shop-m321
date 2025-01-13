@@ -12,8 +12,8 @@ import (
 
 func setup() {
 	utils.InitializeDatabase()
+	utils.ConnectEureka()
 	go utils.ConsumeLogs()
-	// utils.ConnectEureka()
 }
 
 func main() {
