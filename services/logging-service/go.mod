@@ -4,6 +4,8 @@ go 1.23.2
 
 require (
 	github.com/ArthurHlt/go-eureka-client v1.1.0
+	github.com/confluentinc/confluent-kafka-go/v2 v2.8.0
+	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/mux v1.8.1
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gorm v1.25.12
@@ -13,11 +15,9 @@ require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/clbanning/mxj v1.8.4 // indirect
-	github.com/confluentinc/confluent-kafka-go/v2 v2.8.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/franela/goreq v0.0.0-20171204163338-bcd34c9993f8 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
-	github.com/gorilla/handlers v1.5.2 // indirect
 	github.com/hudl/fargo v1.4.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect

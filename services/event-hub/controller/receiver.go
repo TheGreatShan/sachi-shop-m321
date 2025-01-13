@@ -1,10 +1,11 @@
-package main
+package controller
 
 import(
 	"fmt"
-
 	"encoding/json"
 	"net/http"
+
+    "event-hub/utils"
 )
 
 func Receive(w http.ResponseWriter, r *http.Request) {
@@ -25,7 +26,7 @@ func Receive(w http.ResponseWriter, r *http.Request) {
 
     messageString := fmt.Sprintf("%v", message)
 
-    ProduceEvent(messageString, topic)
+    utils.ProduceEvent(messageString, topic)
 
     w.WriteHeader(http.StatusOK)
     json.NewEncoder(w).Encode(message)

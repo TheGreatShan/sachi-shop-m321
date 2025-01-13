@@ -11,9 +11,9 @@ func ConnectEureka() {
 		"http://localhost:8761/eureka",
 	})
 
-	instance := eureka.NewInstanceInfo("localhost", "logging-service", "logging-service-1", 8000, 30, false)
+	instance := eureka.NewInstanceInfo("localhost", "event-hub-service", "event-hub-service-1", 8005, 30, false)
 
-	err := client.RegisterInstance("logging-service", instance)
+	err := client.RegisterInstance("event-hub-service", instance)
 	if err != nil {
 		log.Fatal("Error registering instance:", err)
 	}
