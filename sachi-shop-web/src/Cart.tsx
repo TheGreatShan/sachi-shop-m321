@@ -1,11 +1,44 @@
 import { useCart } from "./context/CartContext";
 
+import { produceLog } from "./api/log";
+
+interface Log {
+  level: string;
+  message: string;
+  timestamp: Date;
+  user: string;
+}
+
+interface CartProduct {
+  id: string;
+  product: string;
+  description: string;
+  stock: number;
+  price: number;
+  count: number;
+}
+
 export default function Cart() {
   const { cart, updateCart, clearCart } = useCart();
 
   const totalItems = cart.reduce((acc, item) => acc + item.count, 0);
 
   const totalCost = cart.reduce((acc, item) => acc + item.price * item.count, 0);
+
+  const handleOrder = async() => {
+    const now = new Date()
+
+    console.log(cart)
+
+    const log : Log = {
+      "level": "INFO",
+      "message": "John ordered " + totalItems + " items, costing " + totalCost + ".-",
+      "timestamp": now,
+      "user": ""
+    }
+
+    await produceLog(log)
+  }
 
   return (
     <>
@@ -84,6 +117,14 @@ export default function Cart() {
             )}
           </div>
         </div>
+      </div>
+      <div className="flex justify-center pt-5">
+            <button
+              className="bg-gray-200 px-3 py-2 rounded-lg hover:bg-gray-300"
+              onClick={() => handleOrder()}
+            >
+              Order
+            </button>
       </div>
     </>
   );
