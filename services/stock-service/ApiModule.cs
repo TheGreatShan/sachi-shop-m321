@@ -7,11 +7,13 @@ namespace stock;
 
 public class ApiModule
 {
-    public void ConfigureServices(IServiceCollection services)
+    public void ConfigureServices(IServiceCollection services, WebApplicationBuilder builder)
     {
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddControllers();
+
+        services.AddDiscoveryClient(builder.Configuration);
         services.AddServiceDiscovery(options => options.UseEureka());
 
         services.AddSingleton<IDbConnection>(_ => SqlConnection.GetConnection());
