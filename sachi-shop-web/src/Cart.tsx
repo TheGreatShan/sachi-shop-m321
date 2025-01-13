@@ -28,8 +28,6 @@ export default function Cart() {
   const handleOrder = async() => {
     const now = new Date()
 
-    console.log(cart)
-
     const log : Log = {
       "level": "INFO",
       "message": "John ordered " + totalItems + " items, costing " + totalCost + ".-",
