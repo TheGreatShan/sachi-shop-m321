@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"github.com/gorilla/mux"
-	"github.com/gorilla/handlers"
+	// "github.com/gorilla/handlers"
 
 	"logging-service/controller"
 	"logging-service/utils"
@@ -12,7 +12,7 @@ import (
 
 func setup() {
 	utils.InitializeDatabase()
-	utils.ConnectEureka()
+	go utils.ConnectEureka()
 	go utils.ConsumeLogs()
 }
 
@@ -29,13 +29,13 @@ func main() {
 	api.HandleFunc("/log", controller.HandlePostLog).Methods("POST")
 	api.HandleFunc("/log", controller.HandleDeleteLog).Methods("DELETE")
 
-	corsHandler := handlers.CORS(
-		handlers.AllowedOrigins([]string{"http://localhost:5173"}),
-		handlers.AllowedMethods([]string{"GET", "POST", "DELETE", "OPTIONS"}),
-		handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}),
-	)
+	// corsHandler := handlers.CORS(
+	// 	handlers.AllowedOrigins([]string{"http://localhost:5173"}),
+	// 	handlers.AllowedMethods([]string{"GET", "POST", "DELETE", "OPTIONS"}),
+	// 	handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}),
+	// )
 
 	fmt.Println("Logging service started")
-	http.ListenAndServe(":8000", corsHandler(r))
+	http.ListenAndServe(":8000", r)
 
 }
