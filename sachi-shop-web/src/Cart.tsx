@@ -1,6 +1,7 @@
 import { useCart } from "./context/CartContext";
 
 import { produceLog } from "./api/log";
+import { Link } from "react-router-dom";
 
 interface Log {
   level: string;
@@ -32,8 +33,10 @@ export default function Cart() {
       "level": "INFO",
       "message": "John ordered " + totalItems + " items, costing " + totalCost + ".-",
       "timestamp": now,
-      "user": ""
+      "user": "john.doe@gmail.com"
     }
+
+    clearCart()
 
     await produceLog(log)
   }
@@ -116,14 +119,19 @@ export default function Cart() {
           </div>
         </div>
       </div>
-      <div className="flex justify-center pt-5">
-            <button
-              className="bg-gray-200 px-3 py-2 rounded-lg hover:bg-gray-300"
-              onClick={() => handleOrder()}
-            >
-              Order
-            </button>
-      </div>
+      {
+        cart.length > 0 &&
+          <Link to="/">
+            <div className="flex justify-center pt-5">
+                  <button
+                    className="bg-gray-200 px-3 py-2 rounded-lg hover:bg-gray-300"
+                    onClick={() => handleOrder()}
+                  >
+                    Order
+                  </button>
+            </div>
+          </Link>
+      }
     </>
   );
 }
