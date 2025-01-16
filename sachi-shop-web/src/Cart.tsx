@@ -2,6 +2,7 @@ import { useCart } from "./context/CartContext";
 
 import { produceLog } from "./api/log";
 import { Link } from "react-router-dom";
+import { orderProducts } from "./api/order";
 
 interface Log {
   level: string;
@@ -19,22 +20,42 @@ interface CartProduct {
   count: number;
 }
 
+export interface ApiCartProduct {
+  email : string;
+  date: Date;
+  productIds : string[]
+}
+
 export default function Cart() {
   const { cart, updateCart, clearCart } = useCart();
 
   const totalItems = cart.reduce((acc, item) => acc + item.count, 0);
 
   const totalCost = cart.reduce((acc, item) => acc + item.price * item.count, 0);
+  
+  const order : ApiCartProduct = {
+    email: "john.doe@gmail.com",
+    date: new Date(),
+    productIds: []
+  }
+
+  cart.forEach(x => {
+    for(let y = 0; y < x.count ;y++ ){
+      order.productIds.push(x.id)
+    }
+  })
 
   const handleOrder = async() => {
     const now = new Date()
-
+    
     const log : Log = {
       "level": "INFO",
       "message": "John ordered " + totalItems + " items, costing " + totalCost + ".-",
       "timestamp": now,
       "user": "john.doe@gmail.com"
     }
+
+    await orderProducts(order)
 
     clearCart()
 
